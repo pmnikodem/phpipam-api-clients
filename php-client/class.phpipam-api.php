@@ -584,7 +584,7 @@ class phpipam_api_client  {
      * @param bool $token_file (default: false)
      * @return void
      */
-    public function execute ($method = false, $controller = false, $identifiers = array(), $params = array(), $token_file = false) {
+    public function execute ($method = false, $controller = false, $identifiers = array(), $params = array(), $data = array(), $token_file = false) {
         // check and set method
         $this->set_api_method ($method);
         // set api controller
@@ -598,6 +598,10 @@ class phpipam_api_client  {
         $this->curl_set_params ($params);
         // set HTTP method
         $this->curl_set_http_method ();
+	// set HTTP payload
+	if (is_array($data) && sizeof($data)>0 && ($method == 'POST' || $method == 'PATCH')) {
+		$this->curl_set_data ($data);
+	}
 
         // if not encrypted set params
         if(!$this->api_encrypt) {
@@ -703,6 +707,16 @@ class phpipam_api_client  {
             // reset url
             curl_setopt($this->Connection, CURLOPT_URL, $this->api_url."?app_id=".$this->api_app_id."&enc_request=".$encrypted_request);
         }
+    }
+
+    /**
+     * Sets HTTP payload to JSON-encoded data
+     *
+     * @access private
+     * @return void
+     */
+    private function curl_set_data ($data) {
+	curl_setopt($this->Connection, CURLOPT_POSTFIELDS, json_encode($data));
     }
 
     /**
