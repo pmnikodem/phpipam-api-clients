@@ -867,7 +867,7 @@ class phpipam_api_client  {
                 CURLOPT_SSL_VERIFYHOST => 0,
                 CURLOPT_SSL_VERIFYPEER => 0,
                 CURLOPT_POST => true,
-                CURLOPT_HTTPHEADER => array('Authorization: Basic '. base64_encode($this->api_username.":".$this->api_password))
+                CURLOPT_HTTPHEADER => array('Authorization: Basic '. base64_encode($this->api_username.":".$this->api_password), 'Content-Length: 0')
             )
         );
         // send request and save response
